@@ -18,12 +18,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Contact"
-            android:screenOrientation="landscape"/>
-        <activity android:name=".message"
-            android:screenOrientation="landscape">
-
-        </activity>
+        <activity
+            android:name=".Contact"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".message"
+            android:screenOrientation="landscape"></activity>
+        <activity android:name=".Contact_Info"></activity>
     </application>
 
 </manifest>
