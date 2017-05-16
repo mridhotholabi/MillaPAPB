@@ -1,5 +1,6 @@
 package com.example.ridho.milla;
 
+import android.content.Intent;
 import android.graphics.Point;
 import android.opengl.GLSurfaceView;
 import android.os.Handler;
@@ -25,18 +26,17 @@ import java.util.logging.ConsoleHandler;
 
 public class message extends AppCompatActivity implements OnTouchListener{
 
+    static message message1;
     private GestureDetectorCompat gestureObject;
-    private TextToSpeech t1;
     private Button button1,button2,button3,button4,button5,button6;
-    private ConstraintLayout layout_message;
-    private TextView tvm;
+    public static TextView tvm;
     private boolean mbutton1 = false, mbutton2 = false, mbutton3 = false, mbutton4 = false, mbutton5 = false, mbutton6 = false;
     private String text = "";
-    private final Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Main.t1.speak("Enter your message",TextToSpeech.QUEUE_FLUSH,null);
         setContentView(R.layout.activity_message);
 
         button1 = (Button) findViewById(R.id.btn1);
@@ -46,30 +46,19 @@ public class message extends AppCompatActivity implements OnTouchListener{
         button5 = (Button) findViewById(R.id.btn5);
         button6 = (Button) findViewById(R.id.btn6);
         tvm = (TextView) findViewById(R.id.tvmessage);
-        layout_message = (ConstraintLayout) findViewById(R.id.layout1);
         button1.setOnTouchListener(this);
         button2.setOnTouchListener(this);
         button3.setOnTouchListener(this);
         button4.setOnTouchListener(this);
         button5.setOnTouchListener(this);
         button6.setOnTouchListener(this);
+        message1 = this;
 
-        t1=new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                if (status != TextToSpeech.ERROR) {
-                    t1.setLanguage(Locale.ENGLISH);
-                }
-            }
-        });
         gestureObject = new GestureDetectorCompat(this, new message.LearnGesture());
-        //{
-            //public void onClick(View v) {
-                // Perform action on click
-                //Log.d("mylog","button1");
-                //Toast.makeText(getBaseContext(),"This is button 1",Toast.LENGTH_LONG).show();
-            //}
-        //});
+    }
+
+    public static message getInstance(){
+        return message1;
     }
 
     @Override
@@ -90,6 +79,14 @@ public class message extends AppCompatActivity implements OnTouchListener{
                 tvm.append(" ");
             }
             return super.onFling(e1, e2, velocityX, velocityY);
+        }
+
+        @Override
+        public boolean onDoubleTap(MotionEvent e) {
+
+            Intent intent = new Intent(message.this,Send_Messages.class);
+            startActivity(intent);
+            return super.onDoubleTap(e);
         }
     }
 
@@ -159,7 +156,7 @@ public class message extends AppCompatActivity implements OnTouchListener{
                 {
                     Log.d("cancel","ok");
                     tvm.append(text);
-                    t1.speak(String.valueOf(tvm.getText()),TextToSpeech.QUEUE_FLUSH,null);
+                    Main.t1.speak(String.valueOf(tvm.getText()),TextToSpeech.QUEUE_FLUSH,null);
                     text = "";
                 }
                 break;
